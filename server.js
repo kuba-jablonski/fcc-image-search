@@ -28,7 +28,7 @@ app.get('/imagesearch/:searchquery', (req, res) => {
             });
         });
 
-        res.send(customRes);
+        res.status(200).send(customRes);
     }).then(() => {
         let search = new Search({
             term: searchQuery,
@@ -42,3 +42,5 @@ app.get('/imagesearch/:searchquery', (req, res) => {
 app.listen(port, () => {
     console.log(`Server up on port ${port}`);
 });
+
+module.exports = {app};
