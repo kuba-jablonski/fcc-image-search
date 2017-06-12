@@ -3,17 +3,7 @@ const request = require('supertest');
 
 const {app} = require('./../server');
 const {Search} = require('./../models/search');
-
-const seedSearch = [
-    {
-        term: 'test term1',
-        when: 'test when1'
-    },
-    {
-        term: 'test term2',
-        when: 'test when2'
-    }
-];
+const {seedSearch} = require('./seed');
 
 beforeEach((done) => {
     Search.remove({}).then(() => {
@@ -42,3 +32,21 @@ describe('GET /imagesearch/:searchquery', () => {
             });
     });
 });
+
+describe('GET /latest/imagesearch', () => {
+    it('should get 10 latest searches', (done) => {
+        request(app)
+            .get('/latest/imagesearch')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body[0].term).toBe('test term 100');
+                expect(res.body[1].term).toBe('test term 99');
+                expect(res.body.length).toBe(10);
+            })
+            .end(done);
+    });
+});
+
+
+
+
