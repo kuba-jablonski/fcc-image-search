@@ -22,20 +22,23 @@ beforeEach((done) => {
 });
 
 describe('GET /imagesearch/:searchquery', () => {
-    it('should save search to a database', (done) => {
+    it('should send search result and save query to database', (done) => {
         let term = 'slavs squatting';
 
         request(app)
             .get(`/imagesearch/${term}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.length).toBe(10);
+            })
             .end((e) => {
                 if (e) return done(e);
 
                 Search.find({term}).then((docs) => {
-                    console.log(docs);
                     expect(docs.length).toBe(1);
                     expect(docs[0].term).toBe(term);
                     done();
                 }).catch((e) => done(e));
             });
-    })
-})
+    });
+});
